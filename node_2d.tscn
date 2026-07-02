@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://chshdh2xbiibs"]
+
+[ext_resource type="Texture2D" uid="uid://cips2b8l40cdk" path="res://assets/bg.svg" id="1_wtcfe"]
+[ext_resource type="PackedScene" uid="uid://e6c7jk687p5t" path="res://assets/player/player.tscn" id="3_epypp"]
+[ext_resource type="PackedScene" uid="uid://w22ne45il4y0" path="res://ghost.tscn" id="4_0hol4"]
+[ext_resource type="PackedScene" uid="uid://b61u1yrjgpuat" path="res://block.tscn" id="5_q6r6c"]
+
+[node name="Node2D" type="Node2D" unique_id=1308750444]
+y_sort_enabled = true
+
+[node name="bg" type="Sprite2D" parent="." unique_id=20547783]
+z_index = -1
+texture_filter = 1
+position = Vector2(960, 540)
+texture = ExtResource("1_wtcfe")
+
+[node name="ghost2" parent="." unique_id=45540024 instance=ExtResource("4_0hol4")]
+position = Vector2(888, 424)
+
+[node name="ghost" parent="." unique_id=1590424520 instance=ExtResource("4_0hol4")]
+position = Vector2(672, 424)
+
+[node name="player" parent="." unique_id=423061998 instance=ExtResource("3_epypp")]
+position = Vector2(688, 616)
+
+[node name="block" parent="." unique_id=1049178696 instance=ExtResource("5_q6r6c")]
+position = Vector2(768, 448)
+scale = Vector2(5, 1)
+
+[node name="block2" parent="." unique_id=535055879 instance=ExtResource("5_q6r6c")]
+position = Vector2(448, 672)
+scale = Vector2(1, 4.319998)

@@ -1,0 +1,47 @@
+[gd_scene format=3 uid="uid://dafjbdhxq76rw"]
+
+[ext_resource type="Texture2D" uid="uid://bxd3dvfdg7ysu" path="res://assets/particles/dust.svg" id="1_6x53a"]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_f2hpn"]
+particles_animation = true
+particles_anim_h_frames = 3
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_f2hpn"]
+_data = [Vector2(0.0029498488, 0.27862155), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_6x53a"]
+_data = [Vector2(0, 1), 0.0, -0.019852242, 0, 0, Vector2(1, 0.33936924), -1.1374292, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_6x53a"]
+colors = PackedColorArray(1, 1, 1, 0.5254902, 0.8848981, 0.8848981, 0.8848981, 0)
+
+[node name="landingdust" type="CPUParticles2D" unique_id=509716279]
+z_as_relative = false
+material = SubResource("CanvasItemMaterial_f2hpn")
+emitting = false
+amount = 3
+texture = ExtResource("1_6x53a")
+lifetime = 0.8
+one_shot = true
+speed_scale = 0.8
+explosiveness = 1.0
+lifetime_randomness = 0.2
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 150.0
+angular_velocity_max = 100.0
+damping_min = 600.0
+damping_max = 700.0
+damping_curve = SubResource("Curve_f2hpn")
+angle_max = 720.0
+scale_amount_min = 0.5
+scale_amount_max = 0.75
+scale_amount_curve = SubResource("Curve_6x53a")
+color = Color(1, 1, 1, 0.49411765)
+color_ramp = SubResource("Gradient_6x53a")
+anim_offset_max = 1.0

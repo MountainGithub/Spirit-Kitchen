@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://w22ne45il4y0"]
+
+[ext_resource type="Script" uid="uid://b300g3xdpcxd" path="res://ghost.gd" id="1_6attn"]
+[ext_resource type="Texture2D" uid="uid://bden1smv845ok" path="res://assets/ghost.svg" id="1_v5pp4"]
+
+[node name="ghost" type="Node2D" unique_id=45540024]
+script = ExtResource("1_6attn")
+
+[node name="sprite" type="Sprite2D" parent="." unique_id=679048799]
+position = Vector2(0, -53)
+texture = ExtResource("1_v5pp4")
