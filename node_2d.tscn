@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cips2b8l40cdk" path="res://assets/bg.svg" id="1_wtcfe"]
 [ext_resource type="PackedScene" uid="uid://e6c7jk687p5t" path="res://assets/player/player.tscn" id="3_epypp"]
 [ext_resource type="PackedScene" uid="uid://w22ne45il4y0" path="res://ghost.tscn" id="4_0hol4"]
+[ext_resource type="PackedScene" uid="uid://c5486eh5f5h8v" path="res://assets/dummy/dummy.tscn" id="5_kdubu"]
 [ext_resource type="PackedScene" uid="uid://b61u1yrjgpuat" path="res://block.tscn" id="5_q6r6c"]
 
 [node name="Node2D" type="Node2D" unique_id=1308750444]
@@ -21,7 +22,7 @@ position = Vector2(888, 424)
 position = Vector2(672, 424)
 
 [node name="player" parent="." unique_id=423061998 instance=ExtResource("3_epypp")]
-position = Vector2(688, 616)
+position = Vector2(600, 584)
 
 [node name="block" parent="." unique_id=1049178696 instance=ExtResource("5_q6r6c")]
 position = Vector2(768, 448)
@@ -30,3 +31,9 @@ scale = Vector2(5, 1)
 [node name="block2" parent="." unique_id=535055879 instance=ExtResource("5_q6r6c")]
 position = Vector2(448, 672)
 scale = Vector2(1, 4.319998)
+
+[node name="Dummy" parent="." unique_id=1379496552 instance=ExtResource("5_kdubu")]
+position = Vector2(864, 624)
+
+[node name="Dummy2" parent="." unique_id=1464522510 instance=ExtResource("5_kdubu")]
+position = Vector2(992, 728)

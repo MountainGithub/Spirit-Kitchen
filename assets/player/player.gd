@@ -12,18 +12,22 @@ const fx_landingdust = preload("res://assets/particles/landingdust.tscn")
 @onready var sprite_pivot = $pivot
 @onready var debug = $debug
 @onready var animation_player = $animation_player
-@onready var pan = $pivot/pan
+@onready var pan_pivot = $pivot/sprite/pan_pivot
+@onready var pan = $pivot/sprite/pan_pivot/pan
 
 @export var max_speed: int = 300
 @export var acceleration: int = 12
 @export var friction: int = 8
+@export var can_attack_again: bool = true
+
 var default_scale = Vector2(1.0,1.0)
 
-var facing: int
+var facing: int = 1
 var is_attacking: bool = false
 var animation_jump_strengh_set: float = 3
 var animation_jump_strengh: float = 0.0
 var animation_offset_y: float = 0.0
+var alpha: float = 1.0
 
 func _ready() -> void:
 	play_animation(Animations.IDLE)
@@ -31,12 +35,20 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	
-	#debug.text = str(animation_jump_strengh) + '\n' + str(animation_offset_y)
-	sprite.offset.y = animation_offset_y
-	pan.offset.y = animation_offset_y * facing
+	#debug.text = "pivot: " + str(pan_pivot.rotation_degrees) + '\n' + "pan: " + str(pan.rotation_degrees) + ' ' + str(pan.flip_v)
+	#debug.text = "pivot: " + str(pan_pivot.rotation_degrees) 
+	debug.text = str(can_attack_again) 
+	#debug.text = str($pivot/sprite/pan_pivot/Hitbox/CollisionPolygon2D.disabled) 
 	
-	if Input.is_action_just_pressed("attack"):
-		play_animation(Animations.ATTACK)
+	sprite.offset.y = animation_offset_y - 60
+	pan.offset.y = animation_offset_y * facing
+	$pivot/sprite/pan_pivot/pan/trail.offset.y = animation_offset_y * facing
+	
+	if Input.is_action_just_released("attack"):
+		if not is_attacking or can_attack_again:
+			pan_pivot.look_at(get_global_mouse_position())
+			animation_player.stop()
+			play_animation(Animations.ATTACK)
 
 func _physics_process(delta: float) -> void:
 	var input = Vector2(
@@ -44,20 +56,46 @@ func _physics_process(delta: float) -> void:
 		Input.get_action_strength('down') - Input.get_action_strength('up')	
 	).normalized()
 	
+	rotation(delta)
 	
-	var mouse_x = get_local_mouse_position().x
-	if mouse_x > 50:
-		sprite.flip_h = false
-		facing = 1
-	elif mouse_x < -50:
-		sprite.flip_h = true
-		facing = -1
-	if not is_attacking:
-		play_animation(Animations.IDLE)
-		
-	pan.look_at(get_global_mouse_position())
+	jumping(input)
 	
+	var lerp_weight = delta * (acceleration if input else friction)
+	velocity = lerp(velocity, input * max_speed, lerp_weight)
 	
+	move_and_slide()
+
+#handling rotation and animations
+func rotation(delta):
+	var mouse_pos = get_local_mouse_position()
+	if mouse_pos.y > -100:
+		pan_pivot.show_behind_parent = false
+		alpha = lerp(alpha, 1.0, 0.1)
+	else:
+		pan_pivot.show_behind_parent = true
+		alpha = lerp(alpha, 0.5, 0.1)
+	sprite.set_self_modulate(Color(1,1,1,alpha))
+	
+	if is_attacking and not can_attack_again:
+		return
+	
+	if not is_attacking or can_attack_again:
+		if Vector2.ZERO.distance_to(mouse_pos) > 20:
+			if mouse_pos.x > 20:
+				sprite.flip_h = false
+				facing = 1
+			elif mouse_pos.x < -20:
+				sprite.flip_h = true
+				facing = -1
+			if not is_attacking:
+				var target_angle = global_position.angle_to_point(get_global_mouse_position())
+				pan_pivot.rotation = lerp_angle(pan_pivot.rotation, target_angle, 25 * delta)
+
+		if not is_attacking:
+			play_animation(Animations.IDLE)
+
+# jump if moving
+func jumping(input):
 	if animation_jump_strengh == 0 and animation_offset_y == 0:
 		if input != Vector2.ZERO:
 			animation_jump_strengh = animation_jump_strengh_set
@@ -70,11 +108,6 @@ func _physics_process(delta: float) -> void:
 			animation_offset_y = 0
 			play_animation(Animations.LAND)
 			spawn_landingdust()
-	
-	var lerp_weight = delta * (acceleration if input else friction)
-	velocity = lerp(velocity, input * max_speed, lerp_weight)
-	
-	move_and_slide()
 
 func play_animation(animation):
 	match animation:
@@ -110,7 +143,7 @@ func play_animation(animation):
 				animation_player.play("attack-left")
 			
 func animation_finished(animation):
-	if animation in ["attack-right", "attack-left"]:
+	if animation in ["attack-left", "attack-right"]:
 		play_animation(Animations.IDLE)
 		is_attacking = false
 			
